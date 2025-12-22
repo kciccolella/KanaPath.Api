@@ -8,7 +8,13 @@ namespace KanaPath.Api.Controllers;
 public class KanaController : ControllerBase
 {
     [HttpGet]
-    public IEnumerable<Kana> Get()
+    public Kana Get()
+    {
+        var kanaList = GetKanaList();
+        return GetRandomKana(kanaList);
+    }
+
+    private List<Kana> GetKanaList()
     {
         return new List<Kana>
         {
@@ -18,5 +24,12 @@ public class KanaController : ControllerBase
             new() { Symbol = "え", Romaji = "e" },
             new() { Symbol = "お", Romaji = "o" }
         };
+    }
+
+    private Kana GetRandomKana(List<Kana> kanaList)
+    {
+        var random = new Random();
+        var index = random.Next(kanaList.Count);
+        return kanaList[index];
     }
 }
