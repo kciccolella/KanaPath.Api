@@ -1,80 +1,91 @@
-﻿# KanaPath
+﻿**KanaPath**
 
-KanaPath is a small web API designed to help users learn Japanese **hiragana**
-through simple, game-like interactions.
+KanaPath is a small, API-first web project for learning Japanese **hiragana**.  
+It emphasizes explicit behavior, simple rules, and incremental backend design.
 
-This project is being built incrementally as a learning-focused **portfolio
-application**, with an emphasis on understanding backend fundamentals and
-clean project structure.
+**Why This Project Exists**
 
----
+KanaPath was created to learn how to build a real backend application using **C#** and **ASP.NET Core**.  
+The focus is on understanding _why_ design decisions are made, not just how to implement them.  
+This project avoids tutorials, hidden defaults, and fabricated origin stories.
 
-## Why this project exists
+**Current Functionality**
 
-I created KanaPath to learn how to build a real backend application from scratch
-using **C#** and **ASP.NET Core**.
+KanaPath currently exposes a single endpoint.
 
-Rather than following a tutorial step by step, I wanted to work on a project
-that:
-- Aligns with my personal interests (language learning and games)
-- Encourages learning concepts gradually instead of all at once
-- Can evolve over time into a more complete, full-stack application
+GET /api/kana
 
-The long-term vision is to turn KanaPath into a small learning game that uses
-repetition and progress tracking to help users memorize Japanese kana.
+The endpoint returns hiragana characters and their romaji equivalents based on **explicit query filters**.
 
----
+**API Rules**
 
-## Current functionality
+The following rules define the current API contract.
 
-At its current stage, KanaPath is intentionally simple.
+- Responses are always returned as a list
+- At least one filter (row or group) must be provided
+- Requests with no filters return **400 Bad Request**
+- Random selection is unique
+- If count exceeds available results, all matching kana are returned
 
-The API currently provides:
-- A single endpoint that returns a small set of hiragana characters and their
-  romaji equivalents
+These rules are enforced through integration tests.
 
-This version uses **in-memory data** so that the focus remains on learning:
-- API routing
-- Controllers
-- Models
-- JSON responses
+**Query Parameters**
 
-More advanced features such as persistence, authentication, and a frontend
-will be added in later phases.
+| **Parameter** | **Description** |
+| --- | --- |
+| row | Kana row (e.g. ra, ka) |
+| group | Kana group (main, dakuten, combo, all) |
+| count | Number of unique kana to return (default: 1) |
 
----
+**Example Requests**
 
-## Tech stack
+GET /api/kana?row=ra  
+Returns one random kana from the _ra_ row.
+
+GET /api/kana?row=ra&count=5  
+Returns all five kana from the _ra_ row.
+
+GET /api/kana?group=dakuten&row=ka  
+Returns one random dakuten kana (が, ぎ, ぐ, げ, ご).
+
+GET /api/kana  
+Returns **400 Bad Request**.
+
+**Current Data Scope**
+
+- Hiragana only
+- In-memory dataset
+- Supported groups:
+  - main
+  - dakuten (ka-row only)
+  - combo (reserved)
+  - all (union of available groups)
+
+Persistence and user accounts are intentionally not implemented.
+
+**Tech Stack**
 
 - C#
 - ASP.NET Core Web API (.NET 8)
-- OpenAPI / Swagger (for API testing)
+- xUnit with Microsoft.AspNetCore.Mvc.Testing
+- OpenAPI / Swagger (exploration only)
 - Visual Studio 2022
 
----
+**Running the Project Locally**
 
-## How to run the project locally
+- Clone the repository
+- Open the solution in **Visual Studio 2022**
+- Press **F5** to run the application
+- Navigate to /swagger for API exploration
+- Use **Test Explorer** to run integration tests
 
-1. Clone the repository
-2. Open the solution in **Visual Studio 2022**
-3. Press **F5** to run the application
-4. When the browser opens, navigate to `/swagger`
-5. Use the **GET /api/kana** endpoint to test the API
+**Project Status**
 
----
+🚧 **In Progress**
 
-## Project status
+KanaPath prioritizes clarity, explicit intent, and testability over feature completeness.
 
-🚧 **In progress**
+**Notes**
 
-KanaPath is being developed incrementally as part of a learning and
-portfolio-building process. Early design decisions favor clarity and
-simplicity over completeness.
-
----
-
-## Notes
-
-This README will evolve as new features are added and as architectural
-decisions are made. Major changes will be documented to explain what was
-learned and why certain approaches were chosen.
+This documentation reflects **current behavior**, not planned features.  
+Changes are documented only when behavior changes.
