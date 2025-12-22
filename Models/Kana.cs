@@ -4,5 +4,6 @@
     {
         public string Symbol { get; set; } = "";
         public string Romaji { get; set; } = "";
+        public string Row { get; set; } = "";
     }
 }
