@@ -8,21 +8,40 @@ namespace KanaPath.Api.Controllers;
 public class KanaController : ControllerBase
 {
     [HttpGet]
-    public ActionResult<IEnumerable<Kana>> Get([FromQuery] string? row = null, [FromQuery] string? group = "main", [FromQuery] int count = 1)
+    public ActionResult<IEnumerable<Kana>> Get([FromQuery] string? row = null, [FromQuery] string? group = null, [FromQuery] int count = 1)
     {
         var allKana = GetKanaList();
 
-        group = string.IsNullOrWhiteSpace(group) ? "main" : group.Trim().ToLowerInvariant();
+        group = string.IsNullOrWhiteSpace(group) ? null : group.Trim().ToLowerInvariant();
+
+        if (group == null && string.IsNullOrWhiteSpace(row))
+        {
+            return BadRequest(new
+            {
+                message = "You must specify at least one filter (row or group)."
+            });
+        }
 
         var allowedGroups = new HashSet<string> { "main", "dakuten", "combo", "all" };
-        if (!allowedGroups.Contains(group))
-            return BadRequest(new { message = $"Unknown group '{group}'. Try: main, dakuten, combo, all." });
+
+        if (group != null && !allowedGroups.Contains(group))
+        {
+            return BadRequest(new
+            {
+                message = $"Unknown group '{group}'. Try: main, dakuten, combo, all."
+            });
+        }
+
 
         var filtered = allKana;
 
         // Group filter (B behavior: default main)
-        if (group != "all")
-            filtered = filtered.Where(k => k.Group.Equals(group, StringComparison.OrdinalIgnoreCase)).ToList();
+        if (group != null && group != "all")
+        {
+            filtered = filtered
+                .Where(k => k.Group.Equals(group, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
 
         // Row filter
         if (!string.IsNullOrWhiteSpace(row))
