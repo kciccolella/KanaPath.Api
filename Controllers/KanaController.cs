@@ -37,11 +37,11 @@ public class KanaController : ControllerBase
         if (count > filtered.Count) count = filtered.Count;
 
         // Return unique random selection
-        var random = new Random();
         var result = filtered
-            .OrderBy(_ => random.Next())
+            .OrderBy(_ => Random.Shared.Next())
             .Take(count)
             .ToList();
+
 
         return Ok(result);
     }
@@ -62,13 +62,12 @@ public class KanaController : ControllerBase
             new() { Symbol = "れ", Romaji = "re", Row = "ra", Group = "main" },
             new() { Symbol = "ろ", Romaji = "ro", Row = "ra", Group = "main" },
 
-        };
-    }
+            new Kana { Symbol = "が", Romaji = "ga", Row = "ka", Group = "dakuten" },
+            new Kana { Symbol = "ぎ", Romaji = "gi", Row = "ka", Group = "dakuten" },
+            new Kana { Symbol = "ぐ", Romaji = "gu", Row = "ka", Group = "dakuten" },
+            new Kana { Symbol = "げ", Romaji = "ge", Row = "ka", Group = "dakuten" },
+            new Kana { Symbol = "ご", Romaji = "go", Row = "ka", Group = "dakuten" },
 
-    private Kana GetRandomKana(List<Kana> kanaList)
-    {
-        var random = new Random();
-        var index = random.Next(kanaList.Count);
-        return kanaList[index];
+        };
     }
 }
