@@ -8,18 +8,29 @@ namespace KanaPath.Api.Controllers;
 public class KanaController : ControllerBase
 {
     [HttpGet]
-    public ActionResult<IEnumerable<Kana>> Get([FromQuery] string? row = null, [FromQuery] int count = 1)
+    public ActionResult<IEnumerable<Kana>> Get([FromQuery] string? row = null, [FromQuery] string? group = "main", [FromQuery] int count = 1)
     {
         var allKana = GetKanaList();
 
-        // Filter by row if provided
-        var filtered = string.IsNullOrWhiteSpace(row)
-            ? allKana
-            : allKana.Where(k => string.Equals(k.Row, row, StringComparison.OrdinalIgnoreCase)).ToList();
+        group = string.IsNullOrWhiteSpace(group) ? "main" : group.Trim().ToLowerInvariant();
+
+        var allowedGroups = new HashSet<string> { "main", "dakuten", "combo", "all" };
+        if (!allowedGroups.Contains(group))
+            return BadRequest(new { message = $"Unknown group '{group}'. Try: main, dakuten, combo, all." });
+
+        var filtered = allKana;
+
+        // Group filter (B behavior: default main)
+        if (group != "all")
+            filtered = filtered.Where(k => k.Group.Equals(group, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        // Row filter
+        if (!string.IsNullOrWhiteSpace(row))
+            filtered = filtered.Where(k => k.Row.Equals(row, StringComparison.OrdinalIgnoreCase)).ToList();
 
         // If row doesn't exist, return a helpful 400
         if (filtered.Count == 0)
-            return BadRequest(new { message = $"Unknown row '{row}'. Try: a, ka, sa, ta, na, ha, ma, ya, ra, wa (once added)." });
+            return BadRequest(new { message = "No kana matched the selected filters." });
 
         // Normalize count
         if (count < 1) count = 1;
@@ -39,17 +50,17 @@ public class KanaController : ControllerBase
     {
         return new List<Kana>
         {
-            new() { Symbol = "あ", Romaji = "a", Row = "a" },
-            new() { Symbol = "い", Romaji = "i", Row = "a" },
-            new() { Symbol = "う", Romaji = "u", Row = "a" },
-            new() { Symbol = "え", Romaji = "e", Row = "a" },
-            new() { Symbol = "お", Romaji = "o", Row = "a" },
+            new() { Symbol = "あ", Romaji = "a", Row = "a", Group = "main" },
+            new() { Symbol = "い", Romaji = "i", Row = "a", Group = "main" },
+            new() { Symbol = "う", Romaji = "u", Row = "a", Group = "main" },
+            new() { Symbol = "え", Romaji = "e", Row = "a", Group = "main" },
+            new() { Symbol = "お", Romaji = "o", Row = "a", Group = "main" },
 
-            new() { Symbol = "ら", Romaji = "ra", Row = "ra" },
-            new() { Symbol = "り", Romaji = "ri", Row = "ra" },
-            new() { Symbol = "る", Romaji = "ru", Row = "ra" },
-            new() { Symbol = "れ", Romaji = "re", Row = "ra" },
-            new() { Symbol = "ろ", Romaji = "ro", Row = "ra" },
+            new() { Symbol = "ら", Romaji = "ra", Row = "ra", Group = "main" },
+            new() { Symbol = "り", Romaji = "ri", Row = "ra", Group = "main" },
+            new() { Symbol = "る", Romaji = "ru", Row = "ra", Group = "main" },
+            new() { Symbol = "れ", Romaji = "re", Row = "ra", Group = "main" },
+            new() { Symbol = "ろ", Romaji = "ro", Row = "ra", Group = "main" },
 
         };
     }
