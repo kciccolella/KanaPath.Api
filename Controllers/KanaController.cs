@@ -67,32 +67,47 @@ public class KanaController : ControllerBase
 
     private List<Kana> GetKanaList()
     {
-        return new List<Kana>
-        {
-            new() { Symbol = "あ", Romaji = "a", Row = "a", Group = "main" },
-            new() { Symbol = "い", Romaji = "i", Row = "a", Group = "main" },
-            new() { Symbol = "う", Romaji = "u", Row = "a", Group = "main" },
-            new() { Symbol = "え", Romaji = "e", Row = "a", Group = "main" },
-            new() { Symbol = "お", Romaji = "o", Row = "a", Group = "main" },
+        var kanaData = new Dictionary<string, List<Kana>>
+    {
+        { "a", new List<Kana>
+            {
+                new Kana { Symbol = "あ", Romaji = "a", Row = "a", Group = "main" },
+                new Kana { Symbol = "い", Romaji = "i", Row = "a", Group = "main" },
+                new Kana { Symbol = "う", Romaji = "u", Row = "a", Group = "main" },
+                new Kana { Symbol = "え", Romaji = "e", Row = "a", Group = "main" },
+                new Kana { Symbol = "お", Romaji = "o", Row = "a", Group = "main" }
+            }
+        },
+        { "ra", new List<Kana>
+            {
+                new Kana { Symbol = "ら", Romaji = "ra", Row = "ra", Group = "main" },
+                new Kana { Symbol = "り", Romaji = "ri", Row = "ra", Group = "main" },
+                new Kana { Symbol = "る", Romaji = "ru", Row = "ra", Group = "main" },
+                new Kana { Symbol = "れ", Romaji = "re", Row = "ra", Group = "main" },
+                new Kana { Symbol = "ろ", Romaji = "ro", Row = "ra", Group = "main" }
+            }
+        },
+        { "ka", new List<Kana>
+            {
+                new Kana { Symbol = "が", Romaji = "ga", Row = "ka", Group = "dakuten" },
+                new Kana { Symbol = "ぎ", Romaji = "gi", Row = "ka", Group = "dakuten" },
+                new Kana { Symbol = "ぐ", Romaji = "gu", Row = "ka", Group = "dakuten" },
+                new Kana { Symbol = "げ", Romaji = "ge", Row = "ka", Group = "dakuten" },
+                new Kana { Symbol = "ご", Romaji = "go", Row = "ka", Group = "dakuten" }
+            }
+        },
+        { "ta", new List<Kana>
+            {
+                new Kana { Symbol = "た", Romaji = "ta", Row = "ta", Group = "main" },
+                new Kana { Symbol = "ち", Romaji = "chi", Row = "ta", Group = "main" },
+                new Kana { Symbol = "つ", Romaji = "tsu", Row = "ta", Group = "main" },
+                new Kana { Symbol = "て", Romaji = "te", Row = "ta", Group = "main" },
+                new Kana { Symbol = "と", Romaji = "to", Row = "ta", Group = "main" }
+            }
+        }
+    };
 
-            new() { Symbol = "ら", Romaji = "ra", Row = "ra", Group = "main" },
-            new() { Symbol = "り", Romaji = "ri", Row = "ra", Group = "main" },
-            new() { Symbol = "る", Romaji = "ru", Row = "ra", Group = "main" },
-            new() { Symbol = "れ", Romaji = "re", Row = "ra", Group = "main" },
-            new() { Symbol = "ろ", Romaji = "ro", Row = "ra", Group = "main" },
-
-            new Kana { Symbol = "が", Romaji = "ga", Row = "ka", Group = "dakuten" },
-            new Kana { Symbol = "ぎ", Romaji = "gi", Row = "ka", Group = "dakuten" },
-            new Kana { Symbol = "ぐ", Romaji = "gu", Row = "ka", Group = "dakuten" },
-            new Kana { Symbol = "げ", Romaji = "ge", Row = "ka", Group = "dakuten" },
-            new Kana { Symbol = "ご", Romaji = "go", Row = "ka", Group = "dakuten" },
-
-            new() { Symbol = "た", Romaji = "ta", Row = "ta", Group = "main" },
-            new() { Symbol = "ち", Romaji = "chi", Row = "ta", Group = "main" },
-            new() { Symbol = "つ", Romaji = "tsu", Row = "ta", Group = "main" },
-            new() { Symbol = "て", Romaji = "te", Row = "ta", Group = "main" },
-            new() { Symbol = "と", Romaji = "to", Row = "ta", Group = "main" },
-
-        };
+        return kanaData.Values.SelectMany(k => k).ToList();
     }
+
 }
