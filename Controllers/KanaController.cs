@@ -87,6 +87,12 @@ public class KanaController : ControllerBase
             new Kana { Symbol = "げ", Romaji = "ge", Row = "ka", Group = "dakuten" },
             new Kana { Symbol = "ご", Romaji = "go", Row = "ka", Group = "dakuten" },
 
+            new() { Symbol = "た", Romaji = "ta", Row = "ta", Group = "main" },
+            new() { Symbol = "ち", Romaji = "chi", Row = "ta", Group = "main" },
+            new() { Symbol = "つ", Romaji = "tsu", Row = "ta", Group = "main" },
+            new() { Symbol = "て", Romaji = "te", Row = "ta", Group = "main" },
+            new() { Symbol = "と", Romaji = "to", Row = "ta", Group = "main" },
+
         };
     }
 }
