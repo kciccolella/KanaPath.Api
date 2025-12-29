@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using KanaPath.Api.Models;
+
 namespace KanaPath.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -8,7 +10,7 @@ namespace KanaPath.Api.Controllers
     public class AuthController : ControllerBase
     {
         [HttpPost("register")]
-        public IActionResult Register()
+        public IActionResult Register([FromBody] RegisterRequest request)
         {
             return Ok();
         }
