@@ -12,6 +12,11 @@ namespace KanaPath.Api.Controllers
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterRequest request)
         {
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+            {
+                return BadRequest("Email and password are required.");
+            }
+
             return Ok();
         }
     }
