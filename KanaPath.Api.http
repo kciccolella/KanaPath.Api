@@ -1,0 +1,6 @@
+@KanaPath.Api_HostAddress = http://localhost:5147
+
+GET {{KanaPath.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
